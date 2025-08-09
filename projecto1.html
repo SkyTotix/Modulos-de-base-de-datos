@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelo de Datos - Oracle Baseball League (OBL)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* --- Estilos para las Entidades del Diagrama --- */
+        .erd-entity {
+            background-color: white;
+            border: 2px solid #3b82f6; /* blue-500 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            width: 220px;
+            min-height: 200px;
+            /* Transiciones para efectos suaves */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        /* Efecto al pasar el cursor sobre las entidades */
+        .erd-entity:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .erd-entity h3 {
+            font-weight: 700;
+            color: #1e3a8a; /* blue-900 */
+            border-bottom: 2px solid #93c5fd; /* blue-300 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .erd-entity ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .erd-entity li {
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        .pk {
+            font-weight: 600;
+            color: #166534; /* green-800 */
+        }
+        .fk {
+            font-weight: 500;
+            color: #991b1b; /* red-800 */
+        }
+        .attr {
+            color: #374151; /* gray-700 */
+        }
+
+        /* --- Animaciones --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Clases de utilidad para aplicar animaciones */
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        .animate-fade-in-up {
+            /* Se inicia oculto para que la animación sea visible */
+            opacity: 0;
+            animation: fadeInUp 0.7s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-10 animate-fade-in">
+            <h1 class="text-4xl font-bold text-blue-900">Propuesta de Modelo de Datos</h1>
+            <p class="text-xl text-gray-600 mt-2">Oracle Baseball League (OBL)</p>
+        </header>
+
+        <main>
+            <!-- Sección de Análisis -->
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-2xl font-bold text-blue-800 border-b-2 border-blue-200 pb-2 mb-4">1. Análisis de Requerimientos</h2>
+                <p class="mb-4">Basado en la transcripción de la reunión con el gerente de OBL, hemos identificado varios puntos clave que modifican y detallan el modelo de datos inicial. A continuación, se resumen las decisiones de diseño más importantes:</p>
+                <ul class="list-disc list-inside space-y-3">
+                    <li><strong>Tipos de Cliente:</strong> Un cliente puede ser un individuo o un representante de equipo, pero se manejarán como cuentas separadas. Esto simplifica el modelo, evitando una estructura de supertipo/subtipo por ahora. La entidad <code class="bg-blue-100 text-blue-800 p-1 rounded">CLIENTE</code> contendrá a ambos.</li>
+                    <li><strong>Representación de Equipos:</strong> La relación entre un cliente (representante) y un equipo es <strong>uno a uno (1:1)</strong>. Un cliente solo puede representar a un equipo, y un equipo solo tiene un representante oficial.</li>
+                    <li><strong>Direcciones de Cliente:</strong> Un cliente puede tener múltiples direcciones de envío. Esto crea una relación <strong>uno a muchos (1:M)</strong> entre <code class="bg-blue-100 text-blue-800 p-1 rounded">CLIENTE</code> y una nueva entidad <code class="bg-blue-100 text-blue-800 p-1 rounded">DIRECCION</code>.</li>
+                    <li><strong>Representantes de Ventas y Equipos:</strong> Un representante de ventas se asigna a múltiples equipos, pero un equipo tiene un solo representante asignado. Es una relación <strong>uno a muchos (1:M)</strong>.</li>
+                    <li><strong>Supervisión de Ventas:</strong> Un representante de ventas puede supervisar a otros. Esto se modela con una <strong>relación unaria (o recursiva)</strong> en la entidad <code class="bg-blue-100 text-blue-800 p-1 rounded">REPRESENTANTE_VENTAS</code>.</li>
+                    <li><strong>Pedidos (Órdenes):</strong> La relación entre un cliente y un pedido es <strong>uno a muchos (1:M)</strong> y es inmutable.</li>
+                    <li><strong>Precios de Items:</strong> Se requiere rastrear el historial de precios. Esto significa que el precio no debe ser un atributo fijo en la entidad <code class="bg-blue-100 text-blue-800 p-1 rounded">ITEM</code>, sino que debe registrarse en el momento de la compra.</li>
+                    <li><strong>Lealtad del Cliente:</strong> La futura implementación de un programa de lealtad se puede manejar añadiendo atributos opcionales a la tabla <code class="bg-blue-100 text-blue-800 p-1 rounded">CLIENTE</code> o con una nueva tabla si la información asociada crece.</li>
+                </ul>
+            </section>
+
+            <!-- Sección de Resolución M:M -->
+            <section class="mb-12 bg-white p-6 rounded-lg shadow-md animate-fade-in-up" style="animation-delay: 0.4s;">
+                <h2 class="text-2xl font-bold text-blue-800 border-b-2 border-blue-200 pb-2 mb-4">2. Resolución de Relaciones Muchos-a-Muchos (M:M)</h2>
+                <p class="mb-4">El principal problema en el diseño inicial es la relación M:M entre <code class="bg-gray-200 p-1 rounded">PEDIDO</code> e <code class="bg-gray-200 p-1 rounded">ITEM</code>. Un pedido puede contener múltiples items, y un item puede estar en múltiples pedidos. Para resolver esto, seguimos los pasos estándar:</p>
+                <ol class="list-decimal list-inside space-y-3">
+                    <li><strong>Eliminar la relación M:M</strong> directa entre las dos entidades.</li>
+                    <li><strong>Crear una nueva entidad de intersección.</strong> La llamaremos <code class="bg-green-100 text-green-800 p-1 rounded">DETALLE_PEDIDO</code>.</li>
+                    <li><strong>Crear dos relaciones 1:M.</strong> Se establece una relación identificadora desde <code class="bg-gray-200 p-1 rounded">PEDIDO</code> a <code class="bg-green-100 text-green-800 p-1 rounded">DETALLE_PEDIDO</code> y otra desde <code class="bg-gray-200 p-1 rounded">ITEM</code> a <code class="bg-green-100 text-green-800 p-1 rounded">DETALLE_PEDIDO</code>.</li>
+                    <li><strong>Añadir atributos adicionales.</strong> La entidad <code class="bg-green-100 text-green-800 p-1 rounded">DETALLE_PEDIDO</code> es el lugar perfecto para almacenar información específica de esa línea de pedido, como:
+                        <ul class="list-disc list-inside ml-6 mt-2">
+                            <li><code class="bg-gray-200 p-1 rounded">Cantidad</code>: Número de unidades de ese item en el pedido.</li>
+                            <li><code class="bg-gray-200 p-1 rounded">PrecioUnitarioVenta</code>: El precio del item al momento de la compra, para manejar cambios de precio a lo largo del tiempo.</li>
+                        </ul>
+                    </li>
+                     <li><strong>Definir la Clave Primaria (UID).</strong> La clave primaria de <code class="bg-green-100 text-green-800 p-1 rounded">DETALLE_PEDIDO</code> será una clave compuesta por las claves foráneas de <code class="bg-gray-200 p-1 rounded">PEDIDO</code> y <code class="bg-gray-200 p-1 rounded">ITEM</code> (<code class="bg-gray-200 p-1 rounded">ID_Pedido</code> + <code class="bg-gray-200 p-1 rounded">ID_Item</code>).</li>
+                </ol>
+            </section>
+            
+            <!-- Sección del ERD -->
+            <section class="mb-12 animate-fade-in-up" style="animation-delay: 0.6s;">
+                <h2 class="text-2xl font-bold text-center text-blue-800 mb-6">3. Diagrama Entidad-Relación (ERD) Propuesto</h2>
+                <div class="relative p-4 overflow-x-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-24 justify-items-center">
+                        
+                        <!-- Columna 1 -->
+                        <div class="space-y-24 flex flex-col items-center">
+                            <div class="erd-entity animate-fade-in-up" style="animation-delay: 0.8s;">
+                                <h3>REPRESENTANTE_VENTAS</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Representante</span></li>
+                                    <li><span class="fk">* ID_Supervisor (FK)</span></li>
+                                    <li><span class="attr">* Nombre</span></li>
+                                    <li><span class="attr">* Email</span></li>
+                                    <li><span class="attr">* Teléfono</span></li>
+                                    <li><span class="attr">o Dirección</span></li>
+                                    <li><span class="attr">o TasaComision</span></li>
+                                </ul>
+                            </div>
+                             <div class="erd-entity animate-fade-in-up" style="animation-delay: 0.9s;">
+                                <h3>DIRECCION</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Direccion</span></li>
+                                    <li><span class="fk">* ID_Cliente (FK)</span></li>
+                                    <li><span class="attr">* Calle</span></li>
+                                    <li><span class="attr">* Ciudad</span></li>
+                                    <li><span class="attr">* Estado</span></li>
+                                    <li><span class="attr">* CodigoPostal</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Columna 2 -->
+                        <div class="space-y-24 flex flex-col items-center">
+                            <div class="erd-entity animate-fade-in-up" style="animation-delay: 1.0s;">
+                                <h3>CLIENTE</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Cliente</span></li>
+                                    <li><span class="attr">* Nombre</span></li>
+                                    <li><span class="attr">* Email</span></li>
+                                    <li><span class="attr">* Teléfono</span></li>
+                                    <li><span class="attr">* Tipo (Individual/Representante)</span></li>
+                                    <li><span class="attr">o NumeroTarjetaLealtad</span></li>
+                                    <li><span class="attr">o FechaUnionLealtad</span></li>
+                                </ul>
+                            </div>
+                            <div class="erd-entity animate-fade-in-up" style="animation-delay: 1.1s;">
+                                <h3>PEDIDO</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Pedido</span></li>
+                                    <li><span class="fk">* ID_Cliente (FK)</span></li>
+                                    <li><span class="attr">* Fecha</span></li>
+                                    <li><span class="attr">* Hora</span></li>
+                                    <li><span class="attr">* TotalPedido</span></li>
+                                </ul>
+                            </div>
+                             <div class="erd-entity animate-fade-in-up" style="animation-delay: 1.2s;">
+                                <h3>DETALLE_PEDIDO</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Pedido (FK)</span></li>
+                                    <li><span class="pk"># ID_Item (FK)</span></li>
+                                    <li><span class="attr">* Cantidad</span></li>
+                                    <li><span class="attr">* PrecioUnitarioVenta</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Columna 3 -->
+                        <div class="space-y-24 flex flex-col items-center">
+                            <div class="erd-entity animate-fade-in-up" style="animation-delay: 1.3s;">
+                                <h3>EQUIPO</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Equipo</span></li>
+                                    <li><span class="fk">* ID_Cliente_Rep (FK)</span></li>
+                                    <li><span class="fk">* ID_Representante_Ventas (FK)</span></li>
+                                    <li><span class="attr">* NombreEquipo</span></li>
+                                    <li><span class="attr">* NumJugadores</span></li>
+                                    <li><span class="attr">o PorcentajeDescuento</span></li>
+                                </ul>
+                            </div>
+                            <div class="erd-entity animate-fade-in-up" style="animation-delay: 1.4s;">
+                                <h3>ITEM</h3>
+                                <ul>
+                                    <li><span class="pk"># ID_Item</span></li>
+                                    <li><span class="attr">* Nombre</span></li>
+                                    <li><span class="attr">* Descripcion</span></li>
+                                    <li><span class="attr">* Categoria</span></li>
+                                    <li><span class="attr">* PrecioListaActual</span></li>
+                                    <li><span class="attr">* UnidadesEnStock</span></li>
+                                    <li><span class="attr">o Color</span></li>
+                                    <li><span class="attr">o Talla</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Definiciones detalladas -->
+            <section class="bg-white p-6 rounded-lg shadow-md animate-fade-in-up" style="animation-delay: 1.5s;">
+                <h2 class="text-2xl font-bold text-blue-800 border-b-2 border-blue-200 pb-2 mb-4">4. Definición de Entidades y Atributos</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-blue-800 text-white">
+                            <tr>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Entidad</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Atributo</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Clave</th>
+                                <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">CLIENTE</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Cliente</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único del cliente.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">Tipo</td><td class="py-2 px-4"></td><td class="py-2 px-4">Indica si es 'Individual' o 'Representante'.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">EQUIPO</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Equipo</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único del equipo.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Cliente_Rep</td><td class="py-2 px-4">FK (Cliente)</td><td class="py-2 px-4">Referencia al cliente que es el representante (Relación 1:1).</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Representante_Ventas</td><td class="py-2 px-4">FK (Rep. Ventas)</td><td class="py-2 px-4">Representante de ventas asignado al equipo.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">REPRESENTANTE_VENTAS</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Representante</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único del representante.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Supervisor</td><td class="py-2 px-4">FK (Rep. Ventas)</td><td class="py-2 px-4">Relación recursiva para el supervisor.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">PEDIDO</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Pedido</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único del pedido.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Cliente</td><td class="py-2 px-4">FK (Cliente)</td><td class="py-2 px-4">Cliente que realizó el pedido.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">ITEM</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Item</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único del producto.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">DETALLE_PEDIDO (Entidad de Intersección)</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Pedido</td><td class="py-2 px-4">PK, FK (Pedido)</td><td class="py-2 px-4">Parte de la clave compuesta.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Item</td><td class="py-2 px-4">PK, FK (Item)</td><td class="py-2 px-4">Parte de la clave compuesta.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">PrecioUnitarioVenta</td><td class="py-2 px-4"></td><td class="py-2 px-4">Precio del item en el momento de la compra.</td></tr>
+                            <tr class="bg-blue-50"><td colspan="4" class="py-2 px-4 font-bold">DIRECCION</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Direccion</td><td class="py-2 px-4">PK</td><td class="py-2 px-4">Identificador único de la dirección.</td></tr>
+                            <tr><td class="py-2 px-4"></td><td class="py-2 px-4">ID_Cliente</td><td class="py-2 px-4">FK (Cliente)</td><td class="py-2 px-4">Cliente al que pertenece la dirección.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 py-4 border-t-2 border-gray-200 animate-fade-in" style="animation-delay: 1.7s;">
+            <p class="text-sm text-gray-500">&copy; 2024 Consultoría de Bases de Datos. Todos los derechos reservados.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
