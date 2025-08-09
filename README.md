@@ -1,4 +1,4 @@
-# Proyecto de Investigaciones
+# Modulos de Base de Datos
 
 Este repositorio contiene una colección de proyectos de investigación sobre diseño de bases de datos, específicamente enfocados en el Oracle Baseball League (OBL).
 
