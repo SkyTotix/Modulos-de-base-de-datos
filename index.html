@@ -3,131 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investigaciones - Portal de Proyectos</title>
+    <title>Proyectos de Investigación</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #e6e7ee;
+            --text-color: #4a5568;
+            --shadow-light: #ffffff;
+            --shadow-dark: #d1d9e6;
+            --accent-color: #667eea;
+        }
+        
         body {
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        .project-card {
+        
+        .neumorphic {
+            background: var(--bg-color);
+            box-shadow: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+            border-radius: 20px;
+        }
+        
+        .neumorphic-inset {
+            background: var(--bg-color);
+            box-shadow: inset 6px 6px 12px var(--shadow-dark), inset -6px -6px 12px var(--shadow-light);
+            border-radius: 15px;
+        }
+        
+        .neumorphic-button {
+            background: var(--bg-color);
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            border-radius: 15px;
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
-        .project-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.04);
+        
+        .neumorphic-button:hover {
+            box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+            transform: translateY(2px);
         }
-        .project-card:nth-child(2) {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        
+        .neumorphic-button:active {
+            box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+            transform: translateY(4px);
         }
-        .project-card:nth-child(3) {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
         }
-        .project-card:nth-child(4) {
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-        .project-card:nth-child(5) {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        
+        .project-icon {
+            background: linear-gradient(145deg, #f0f0f3, #cacaca);
+            box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
         }
-        .project-card:nth-child(6) {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-color), #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header -->
-        <header class="text-center mb-12 animate-fade-in-up">
-            <h1 class="text-5xl font-bold text-gray-800 mb-4">Portal de Investigaciones</h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Explora nuestros proyectos de análisis de bases de datos y modelado de sistemas para Oracle Baseball League</p>
-            <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-600 mx-auto mt-6 rounded-full"></div>
+<body class="min-h-screen">
+    <div class="container mx-auto px-6 py-12">
+        <header class="text-center mb-16">
+            <div class="neumorphic p-8 mb-8 animate-float">
+                <h1 class="text-5xl font-bold gradient-text mb-4">Portal de Investigaciones</h1>
+                <p class="text-lg text-gray-600">Explora nuestros proyectos de análisis de bases de datos y modelado de sistemas para Oracle Baseball League</p>
+            </div>
         </header>
 
         <!-- Projects Grid -->
         <main class="max-w-6xl mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Proyecto 1 -->
-                <a href="projecto1.html" class="project-card block p-6 rounded-xl text-white shadow-lg animate-fade-in-up" style="animation-delay: 0.1s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="projecto1.html" class="neumorphic-button block p-8 group">
+                    <div class="flex items-center mb-6">
+                        <div class="project-icon w-14 h-14 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold">Proyecto 1</h2>
+                        <h2 class="text-2xl font-bold text-gray-700">Proyecto 1</h2>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">Modelo de Datos OBL</h3>
-                    <p class="text-white text-opacity-90 text-sm">Propuesta completa del modelo de datos para Oracle Baseball League, incluyendo análisis de requerimientos y diagrama ERD.</p>
+                    <div class="neumorphic-inset p-4 mb-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Modelo de Datos OBL</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Propuesta completa del modelo de datos para Oracle Baseball League, incluyendo análisis de requerimientos y diagrama ERD.</p>
                 </a>
 
                 <!-- Proyecto 2 -->
-                <a href="projecto2.html" class="project-card block p-6 rounded-xl text-white shadow-lg animate-fade-in-up" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="projecto2.html" class="neumorphic-button block p-8 group">
+                    <div class="flex items-center mb-6">
+                        <div class="project-icon w-14 h-14 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold">Proyecto 2</h2>
+                        <h2 class="text-2xl font-bold text-gray-700">Proyecto 2</h2>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">Relaciones No Transferibles</h3>
-                    <p class="text-white text-opacity-90 text-sm">Análisis detallado de relaciones no transferibles en el modelo de datos OBL con diagramas ERD integrados.</p>
+                    <div class="neumorphic-inset p-4 mb-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Relaciones No Transferibles</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Análisis detallado de relaciones no transferibles en el modelo de datos OBL con diagramas ERD integrados.</p>
                 </a>
 
                 <!-- Proyecto 3 -->
-                <a href="projecto3.html" class="project-card block p-6 rounded-xl text-white shadow-lg animate-fade-in-up" style="animation-delay: 0.3s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="projecto3.html" class="neumorphic-button block p-8 group">
+                    <div class="flex items-center mb-6">
+                        <div class="project-icon w-14 h-14 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold">Proyecto 3</h2>
+                        <h2 class="text-2xl font-bold text-gray-700">Proyecto 3</h2>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">Supertipos y Subtipos</h3>
-                    <p class="text-white text-opacity-90 text-sm">Implementación de jerarquías de entidades usando supertipos y subtipos para optimizar el modelo de datos.</p>
+                    <div class="neumorphic-inset p-4 mb-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Supertipos y Subtipos</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Implementación de jerarquías de entidades usando supertipos y subtipos para optimizar el modelo de datos.</p>
                 </a>
 
                 <!-- Proyecto 4 -->
-                <a href="projecto4.html" class="project-card block p-6 rounded-xl text-white shadow-lg animate-fade-in-up" style="animation-delay: 0.4s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="projecto4.html" class="neumorphic-button block p-8 group">
+                    <div class="flex items-center mb-6">
+                        <div class="project-icon w-14 h-14 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold">Proyecto 4</h2>
+                        <h2 class="text-2xl font-bold text-gray-700">Proyecto 4</h2>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">Relaciones Recursivas y de Arco</h3>
-                    <p class="text-white text-opacity-90 text-sm">Estudio de relaciones recursivas y implementación de relaciones de arco para casos de exclusividad mutua.</p>
+                    <div class="neumorphic-inset p-4 mb-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Relaciones Recursivas y de Arco</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Estudio de relaciones recursivas y implementación de relaciones de arco para casos de exclusividad mutua.</p>
                 </a>
 
                 <!-- Proyecto 5 -->
-                <a href="projecto5.html" class="project-card block p-6 rounded-xl text-white shadow-lg animate-fade-in-up" style="animation-delay: 0.5s;">
-                    <div class="flex items-center mb-4">
-                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="projecto5.html" class="neumorphic-button block p-8 group">
+                    <div class="flex items-center mb-6">
+                        <div class="project-icon w-14 h-14 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl font-bold">Proyecto 5</h2>
+                        <h2 class="text-2xl font-bold text-gray-700">Proyecto 5</h2>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">Datos a través del Tiempo</h3>
-                    <p class="text-white text-opacity-90 text-sm">Modelado de datos históricos y manejo de restricciones temporales en sistemas de bases de datos.</p>
+                    <div class="neumorphic-inset p-4 mb-4">
+                        <h3 class="text-lg font-semibold mb-2 text-gray-700">Datos a través del Tiempo</h3>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Modelado de datos históricos y manejo de restricciones temporales en sistemas de bases de datos.</p>
                 </a>
 
 
@@ -135,8 +168,8 @@
         </main>
 
         <!-- Footer -->
-        <footer class="text-center mt-16 animate-fade-in-up" style="animation-delay: 0.7s;">
-            <div class="max-w-2xl mx-auto">
+        <footer class="text-center mt-16">
+            <div class="neumorphic p-6">
                 <p class="text-gray-600 mb-4">Desarrollado como parte del análisis de sistemas de bases de datos para Oracle Baseball League</p>
                 <div class="flex justify-center space-x-4 text-sm text-gray-500">
                     <span>© 2024 Portal de Investigaciones</span>
